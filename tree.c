@@ -41,15 +41,15 @@ struct valnode{
     int val;
 }; //*valroot = 0;
 
-struct chnode{
-    struct chnode *next;
+struct chrnode{
+    struct chrnode *next;
     int crd;
     char sym;
 }; //*chrroot = 0;
 
 struct lvnode{
     struct lvnode *next;
-    struct chnode *pnthdch;
+    struct chrnode *pnthdch;
     struct valnode *pnthdval;
     int lev;
 } *hdlv = 0;
@@ -64,11 +64,12 @@ struct lvnode *adlvnd(int lev){
 }
 
 void advalnd(struct valnode *pntval, struct valnode *pnthdval){
-    if(!pnthdval)
-        pnthdval = pntval;
-    //for (struct lvnode *pnt = hdlv; pnt; pnt = pnt->next)
-
-}
+    for (struct valnode *pnt = pnthdval; pnt; pnt = pnt->next)
+       if (!pnt->next){
+          pnt->next = pntval;
+          break;
+       }  
+}  
 
 void adchrnd(){
 
@@ -98,7 +99,8 @@ void inft(struct node *root, int crd, int lev){
             pntval->crd = crd;
             insvalnd(pntval, lev);
             if (lev){
-                struct chnode *pntch = (struct chnode *)malloc(sizeof(struct chnode));
+                struct chrnode *pntch = (struct chrnode *)malloc(sizeof(struct chrnode));
+               //adchrnd();
             }
         }
         inft(root->left, crd-1, lev+1);
